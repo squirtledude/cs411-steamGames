@@ -1,31 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './Header';
+// App.js
 
-{/* <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div> */}
+import React from 'react';
+import Genres from './GameGenre'; // Import the Genres component
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <Header />
-      {/* Other components like main content, footer, etc. */}
+      <h1>Game Genres</h1>
+      <Genres /> {/* Render the Genres component */}
     </div>
   );
-}
+};
 
 export default App;
+
+
