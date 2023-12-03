@@ -1,17 +1,18 @@
 // App.js
 
 import React from 'react';
-import Genres from './GameGenre'; // Import the Genres component
+import Games from './GameGenre'; // Import the Games component
 
 const App = () => {
   return (
     <div className="App">
       <h1>Game Genres</h1>
-      <Genres /> {/* Render the Genres component */}
+      <Games /> {/* Render the Games component */}
     </div>
   );
 };
 
 export default App;
+
 
 

@@ -31,13 +31,32 @@ db.connect(err => {
   console.log('Connected to MySQL');
 });
 
-app.get('/genres', (req, res) => {
-  const query = 'SELECT * FROM Genre';
+//creating an endpoint
+// In your server.js or a similar file where you set up routes
+
+app.get('/games', (req, res) => {
+  const query = `
+    SELECT MyGames.GameName, Genre.GenreIsAction AS Action, Genre.GenreIsIndie AS Indie 
+    FROM MyGames
+    JOIN Genre ON MyGames.GameGenreId = Genre.GenreId
+    WHERE Genre.GenreIsAction LIKE 'TRUE'
+    UNION
+    SELECT MyGames.GameName, Genre.GenreIsAction AS Action, Genre.GenreIsIndie AS Indie 
+    FROM MyGames
+    JOIN Genre ON MyGames.GameGenreId = Genre.GenreId
+    WHERE Genre.GenreIsIndie LIKE 'TRUE'
+    LIMIT 25
+  `;
+
   db.query(query, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      res.status(500).send('Error executing the query');
+      throw err;
+    }
     res.json(results);
   });
 });
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
