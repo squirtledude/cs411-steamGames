@@ -31,36 +31,6 @@ db.connect(err => {
   console.log('Connected to MySQL');
 });
 
-//creating an endpoint
-// In your server.js or a similar file where you set up routes
-
-// app.get('/games', (req, res) => {
-//   const query = `
-//     SELECT MyGames.GameName, Genre.GenreIsAction AS Action, Genre.GenreIsIndie AS Indie 
-//     FROM MyGames
-//     JOIN Genre ON MyGames.GameGenreId = Genre.GenreId
-//     WHERE Genre.GenreIsAction LIKE 'TRUE'
-//     UNION
-//     SELECT MyGames.GameName, Genre.GenreIsAction AS Action, Genre.GenreIsIndie AS Indie 
-//     FROM MyGames
-//     JOIN Genre ON MyGames.GameGenreId = Genre.GenreId
-//     WHERE Genre.GenreIsIndie LIKE 'TRUE'
-//     LIMIT 25
-//   `;
-
-//   db.query(query, (err, results) => {
-//     if (err) {
-//       res.status(500).send('Error executing the query');
-//       throw err;
-//     }
-//     res.json(results);
-//   });
-// });
-
-// In your server.js or a similar file
-
-// In your server.js
-
 app.get('/games', (req, res) => {
   let genre = req.query.genre;
   let query;
@@ -109,6 +79,41 @@ app.get('/genres', (req, res) => {
   });
 });
 
+//login route
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM User WHERE UserName = ? AND Password = ?';
+
+  db.query(query, [username, password], (err, results) => {
+    if (err) {
+      res.status(500).json({ success: false, message: 'Error executing the query' });
+      return;
+    }
+    if (results.length > 0) {
+      res.json({ success: true, message: 'Login successful' });
+    } else {
+      res.json({ success: false, message: 'Invalid username or password' });
+    }
+  });
+});
+
+// Signup endpoint
+app.post('/api/signup', (req, res) => {
+  const { username, password } = req.body;
+  const insertQuery = 'INSERT INTO User (UserName, Password) VALUES (?, ?)';
+
+  db.query(insertQuery, [username, password], (err, results) => {
+    if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        res.status(409).json({ success: false, message: 'Username already exists' });
+      } else {
+        res.status(500).json({ success: false, message: 'Error inserting the user' });
+      }
+      return;
+    }
+    res.json({ success: true, message: 'Signup successful' });
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
