@@ -20,7 +20,7 @@ const Signup = ({ onSignUpSuccess }) => {
 
       const data = await response.json();
       if (data.success) {
-        onSignUpSuccess();
+        onSignUpSuccess(username); // Pass the username back to the parent component
       } else {
         alert(data.message);
       }

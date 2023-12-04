@@ -1,26 +1,3 @@
-// import React from 'react';
-
-// const GenreDropdown = () => {
-//   const genreOptions = ["Action", "Indie", "Adventure", "Casual", "Strategy", "RPG", "Simulation", "Early Access", "FreeToPlay", "Sports", "Racing", "MassivelyMultiplayer"];
-
-//   return (
-//     <div>
-//       <label htmlFor="genre-dropdown">Categories: </label>
-//       <select id="genre-dropdown">
-//         {genreOptions.map((option, index) => (
-//           <option key={index} value={option}>
-//             {option}
-//           </option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// };
-
-// export default GenreDropdown;
-
-// GenreDropdown.js
-
 import React, { useState } from 'react';
 
 const GenreDropdown = ({ onGenreSelect }) => {

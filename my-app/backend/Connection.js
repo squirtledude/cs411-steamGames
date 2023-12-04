@@ -36,9 +36,9 @@ app.get('/games', (req, res) => {
   let query;
 
   if (genre) {
-    query = `SELECT MyGames.GameName FROM MyGames JOIN Genre ON MyGames.GameGenreID = Genre.GenreID WHERE ${genre} = 'TRUE' ORDER BY MyGames.MetacriticScore DESC LIMIT 50`;
+    query = `SELECT DISTINCT MyGames.GameName, MyGames.MetacriticScore FROM MyGames JOIN Genre ON MyGames.GameGenreID = Genre.GenreID WHERE ${genre} = 'TRUE' ORDER BY MyGames.MetacriticScore DESC LIMIT 50`;
   } else {
-    query = `SELECT * FROM MyGames`; // Or any default query
+    query = `SELECT * FROM MyGames LIMIT 50`; // Or any default query
   }
 
   db.query(query, (err, results) => {
@@ -68,6 +68,7 @@ app.get('/search', (req, res) => {
   });
 });
 
+// this prob isnt needed
 app.get('/genres', (req, res) => {
   const query = 'SELECT * FROM Genre'; // Adjust the query according to your database schema
   db.query(query, (err, results) => {
@@ -97,7 +98,6 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// Signup endpoint
 app.post('/api/signup', (req, res) => {
   const { username, password } = req.body;
   const insertQuery = 'INSERT INTO User (UserName, Password) VALUES (?, ?)';
@@ -105,15 +105,85 @@ app.post('/api/signup', (req, res) => {
   db.query(insertQuery, [username, password], (err, results) => {
     if (err) {
       if (err.code === 'ER_DUP_ENTRY') {
+        // Username already exists
         res.status(409).json({ success: false, message: 'Username already exists' });
       } else {
-        res.status(500).json({ success: false, message: 'Error inserting the user' });
+        // Other errors
+        console.error('Error inserting user:', err.message);
+        res.status(500).json({ success: false, message: 'Error signing up the user' });
       }
       return;
     }
     res.json({ success: true, message: 'Signup successful' });
   });
 });
+
+app.post('/api/favorite', (req, res) => {
+  const { username, gameName } = req.body;
+  
+  // Query to find the first null favorite game column
+  const findQuery = `
+    SELECT 
+      IF(Favgame_one IS NULL, 'Favgame_one',
+        IF(Favgame_two IS NULL, 'Favgame_two',
+          IF(Favgame_three IS NULL, 'Favgame_three',
+            IF(Favgame_four IS NULL, 'Favgame_four',
+              IF(Favgame_five IS NULL, 'Favgame_five',
+                IF(Favgame_six IS NULL, 'Favgame_six',
+                  IF(Favgame_seven IS NULL, 'Favgame_seven',
+                    IF(Favgame_eight IS NULL, 'Favgame_eight',
+                      IF(Favgame_nine IS NULL, 'Favgame_nine',
+                        IF(Favgame_ten IS NULL, 'Favgame_ten', NULL)
+  ))))))))) AS firstNullFav 
+    FROM User WHERE UserName = ?`;
+
+  db.query(findQuery, [username], (err, results) => {
+    if (err) {
+      console.error('Error finding first null favorite:', err.message);
+      res.status(500).json({ success: false, message: 'Error finding favorite' });
+      return;
+    }
+    if (results.length > 0 && results[0].firstNullFav !== null) {
+      const firstNullFav = results[0].firstNullFav;
+      
+      // Update query to set the first null favorite game column
+      const updateQuery = `UPDATE User SET ${firstNullFav} = ? WHERE UserName = ?`;
+
+      db.query(updateQuery, [gameName, username], (updateErr, updateResults) => {
+        if (updateErr) {
+          console.error('Error updating favorite game:', updateErr.message);
+          res.status(500).json({ success: false, message: 'Error updating favorite game' });
+          return;
+        }
+        res.json({ success: true, message: 'Favorite game updated successfully' });
+      });
+    } else {
+      res.json({ success: false, message: 'All favorite game slots are filled' });
+    }
+  });
+});
+
+app.get('/api/recommendations', (req, res) => {
+  const userID = parseInt(req.query.userID, 10);
+
+  // Check if userID is a valid number
+  if (isNaN(userID)) {
+      return res.status(400).json({ success: false, message: 'Invalid user ID' });
+  }
+
+  const query = `SELECT RecommendedGameName FROM Recommendations WHERE UserID = ?`;
+
+  db.query(query, [userID], (err, results) => {
+      if (err) {
+          console.error('Error fetching recommendations:', err.message);
+          res.status(500).json({ success: false, message: 'Error fetching recommendations' });
+          return;
+      }
+      res.json({ success: true, recommendations: results });
+  });
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

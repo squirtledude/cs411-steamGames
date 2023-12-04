@@ -1,24 +1,54 @@
-// App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
-import Games from './GameGenre'; // Assuming this is your component to display games
 import GenreDropdown from './GenreDropdown';
 import Login from './Login';
 import SignUp from './Signup';
-import './App.css'
+import Game from './GameGenre'; // Importing Game component from GameGenre.js
+import Recommendations from './Recommendation';
+import './App.css';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [userID, setUserID] = useState(null);
   const [games, setGames] = useState([]);
+  const [username, setUsername] = useState('');
+  const [recommendations, setRecommendations] = useState([]);
+  
+  useEffect(() => {
+    if (isLoggedIn && userID) {
+      fetchRecommendations();
+    }
+  }, [isLoggedIn, userID]);
 
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
+  const fetchRecommendations = () => {
+    fetch(`/api/recommendations?userID=${userID}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                setRecommendations(data.recommendations);
+            }
+        })
+        .catch(error => console.error('Error fetching recommendations:', error));
   };
 
-  const handleSignUpSuccess = () => {
+
+  const handleLoginSuccess = (loggedInUsername, loggedInUserID) => {
     setIsLoggedIn(true);
-    setIsSigningUp(false); // Hide the signup form after successful signup
+    setUsername(loggedInUsername); // If you still need the username
+    setUserID(loggedInUserID); // Set the userID here
+    fetchRecommendations();
+};
+
+  const handleSignUpSuccess = (signedUpUsername) => {
+    setIsLoggedIn(true);
+    setIsSigningUp(false);
+    setUsername(signedUpUsername);
   };
 
   const handleSearch = (term) => {
@@ -43,6 +73,29 @@ const App = () => {
     setIsSigningUp(!isSigningUp);
   };
 
+  const handleFavorite = (username, gameName) => {
+    console.log(`Attempting to update favorite game for user ${username} with game ${gameName}`);
+    fetch('http://localhost:8080/api/favorite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, gameName }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Response from server:', data);
+      if (data.success) {
+        alert('Favorite game updated successfully');
+      } else {
+        alert('Failed to update favorite game:', data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error updating favorite game:', error);
+    });
+  };
+
   if (!isLoggedIn) {
     return (
       <div className="App">
@@ -61,20 +114,16 @@ const App = () => {
   return (
     <div className="background-image">
       <div className="App">
-        <div>Welcome to the system!</div>
+        <div>Welcome to the system, {username}!</div>
         <SearchBar onSearch={handleSearch} />
         <GenreDropdown onGenreSelect={handleGenreSelect} />
-        <Games games={games} />
-        {/* You can also include a logout button here */}
+        {games.map(game => 
+            <Game key={game.id} gameName={game.GameName} username={username} onFavorite={handleFavorite} />
+        )}
+        <Recommendations games={recommendations} />
       </div>
     </div>
   );
 };
 
 export default App;
-
-
-
-
-
-
