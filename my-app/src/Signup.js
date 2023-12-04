@@ -1,8 +1,8 @@
-// Login.js
+// Signup.js
 
 import React, { useState } from 'react';
 
-const Login = ({ onLoginSuccess }) => {
+const Signup = ({ onSignUpSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,7 +10,7 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch('http://localhost:8080/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,19 +20,19 @@ const Login = ({ onLoginSuccess }) => {
 
       const data = await response.json();
       if (data.success) {
-        onLoginSuccess(username); // Pass the username back to the parent component
+        onSignUpSuccess(username); // Pass the username back to the parent component
       } else {
         alert(data.message);
       }
     } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred during login');
+      console.error('Signup error:', error);
+      alert('An error occurred during signup');
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h2>Sign Up</h2>
       <input 
         type="text" 
         value={username} 
@@ -45,9 +45,9 @@ const Login = ({ onLoginSuccess }) => {
         onChange={e => setPassword(e.target.value)} 
         placeholder="Password" 
       />
-      <button type="submit">Login</button>
+      <button type="submit">Sign Up</button>
     </form>
   );
 };
 
-export default Login;
+export default Signup;
