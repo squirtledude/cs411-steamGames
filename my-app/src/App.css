@@ -37,6 +37,143 @@
   }
 } */
 
+
+
+/*
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+
+  background-image: url('./video_games.jpg');
+
+  height: 100%;
+  width: 100%;
+
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  background-color: rgba(0, 0, 0, 0);
+  background-blend-mode: darken;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.content-container {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+}
+
+.game-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.favorite-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: goldenrod;
+}
+
+*/
+
+
+/* .App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
 .App {
   text-align: center;
 }
@@ -79,6 +216,7 @@
 body, html {
   height: 100%;
   margin: 0;
+  display: flex; /* Create a flex container for the body */
 }
 
 body {
@@ -105,9 +243,33 @@ body {
   z-index: -1;
 }
 
-/* styles for content to improve readability */
-.content-container {
+/* Set up a container for the layout */
+.container {
+  display: flex;
+  height: 100%;
+}
+
+/* Left half of the screen for "For You" page */
+.for-you-page {
+  flex: 1; /* Take up the left half of the screen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Right half of the screen for search results */
+.search-results {
+  flex: 1; /* Take up the right half of the screen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Add styles for content to improve readability */
+.content-container {
   padding: 20px;
 }
 
@@ -139,5 +301,3 @@ body {
   color: goldenrod;
   margin-left: 1em; /* Ensure it doesn't stick to the score */
 }
-
-
