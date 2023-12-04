@@ -1,0 +1,14 @@
+/* SearchBar.css */
+
+.search-bar-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 20px;
+    text-align: right;
+  }
+  
+  .search-form {
+    display: inline-block;
+  }
+  
