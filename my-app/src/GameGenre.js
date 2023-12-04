@@ -1,12 +1,12 @@
-// Genres.js
+// Games.js
 
 import React, { useState, useEffect } from 'react';
 
-const Genres = () => {
-  const [genres, setGenres] = useState([]);
+const Games = () => {
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/genres')
+    fetch('http://localhost:8080/games')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -14,21 +14,22 @@ const Genres = () => {
         return response.json();
       })
       .then(data => {
-        setGenres(data);
+        setGames(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   return (
     <div>
-      <h1>Genres</h1>
+      <h1>Game Names</h1>
       <ul>
-        {genres.map(genre => (
-          <li key={genre.GenreId}>{genre.GenreIsAction} {/* Replace GenreIsAction with the correct field name */}</li>
+        {games.map(game => (
+          <li key={game.GameName}>{game.GameName}</li>
         ))}
       </ul>
     </div>
   );
 };
 
-export default Genres;
+export default Games;
+

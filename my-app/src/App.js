@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Genres from './GameGenre'; // Import the Genres component
-import Login from './Login';
 import './App.css';
 
 const App = () => {
