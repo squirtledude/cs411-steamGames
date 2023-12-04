@@ -23,15 +23,12 @@ const App = () => {
 
   const fetchRecommendations = () => {
     fetch(`/api/recommendations?userID=${userID}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
                 setRecommendations(data.recommendations);
+            } else {
+                console.error('Failed to fetch recommendations');
             }
         })
         .catch(error => console.error('Error fetching recommendations:', error));
@@ -120,7 +117,7 @@ const App = () => {
         {games.map(game => 
             <Game key={game.id} gameName={game.GameName} username={username} onFavorite={handleFavorite} />
         )}
-        <Recommendations games={recommendations} />
+        {isLoggedIn && <Recommendations games={recommendations} />}
       </div>
     </div>
   );

@@ -69,16 +69,16 @@ app.get('/search', (req, res) => {
 });
 
 // this prob isnt needed
-app.get('/genres', (req, res) => {
-  const query = 'SELECT * FROM Genre'; // Adjust the query according to your database schema
-  db.query(query, (err, results) => {
-    if (err) {
-      res.status(500).send('Error fetching genres');
-      throw err;
-    }
-    res.json(results);
-  });
-});
+// app.get('/genres', (req, res) => {
+//   const query = 'SELECT * FROM Genre'; // Adjust the query according to your database schema
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       res.status(500).send('Error fetching genres');
+//       throw err;
+//     }
+//     res.json(results);
+//   });
+// });
 
 //login route
 app.post('/api/login', (req, res) => {
@@ -166,20 +166,17 @@ app.post('/api/favorite', (req, res) => {
 app.get('/api/recommendations', (req, res) => {
   const userID = parseInt(req.query.userID, 10);
 
-  // Check if userID is a valid number
   if (isNaN(userID)) {
       return res.status(400).json({ success: false, message: 'Invalid user ID' });
   }
 
-  const query = `SELECT RecommendedGameName FROM Recommendations WHERE UserID = ?`;
-
+  const query = 'SELECT RecommendedGameName FROM Recommendations WHERE UserID = ?';
   db.query(query, [userID], (err, results) => {
       if (err) {
           console.error('Error fetching recommendations:', err.message);
-          res.status(500).json({ success: false, message: 'Error fetching recommendations' });
-          return;
+          return res.status(500).json({ success: false, message: 'Error fetching recommendations' });
       }
-      res.json({ success: true, recommendations: results });
+      res.json({ success: true, recommendations: results.map(row => row.RecommendedGameName) });
   });
 });
 
