@@ -39,6 +39,33 @@ app.get('/genres', (req, res) => {
   });
 });
 
+//create end point login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // Query to check user credentials (replace with your actual table and column names)
+  const query = 'SELECT * FROM users WHERE username = ?';
+
+  connection.query(query, [username], (error, results) => {
+      if (error) {
+          // handle error
+          return res.status(500).send({ message: 'Server error' });
+      }
+
+      if (results.length > 0) {
+          // Compare the hashed password
+          // Use a hashing library like bcrypt to compare the password
+          // bcrypt.compare(password, results[0].password_hash, (err, isMatch) => {...})
+
+          res.send({ message: 'Login successful' });
+      } else {
+          res.status(401).send({ message: 'Invalid credentials' });
+      }
+  });
+});
+
+
+//starting up the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

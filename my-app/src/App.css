@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  /* Set the background image */
+  background-image: url('./video_games.jpg');
+
+  /* Full width and height */
+  height: 100%;
+  width: 100%;
+
+  /* Background image properties */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  /* Add some transparency to the image */
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: lighten;
+
+  /* Fix the background image */
+  position: fixed; /* This will make the image stay in place while scrolling */
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* styles for content to improve readability */
+.content-container {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+}
