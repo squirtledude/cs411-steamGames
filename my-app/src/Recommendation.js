@@ -7,7 +7,9 @@ const Recommendations = ({ games }) => {
         <div className="recommendations">
             <h2>Recommended Games</h2>
             <ul>
-                {games.map((game, index) => <li key={index}>{game}</li>)}
+                {games.map((game, index) => (
+                    <li key={index}>{game}</li>
+                ))}
             </ul>
         </div>
     );
