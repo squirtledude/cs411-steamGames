@@ -6,11 +6,14 @@ const Recommendations = ({ games }) => {
     return (
         <div className="recommendations">
             <h2>Recommended Games</h2>
-            {games.map((game, index) => (
-                <div key={index}>{game.RecommendedGameName}</div>
-            ))}
+            <ul>
+                {games.map((game, index) => (
+                    <li key={index}>{game}</li>
+                ))}
+            </ul>
         </div>
     );
 };
 
 export default Recommendations;
+
