@@ -221,7 +221,7 @@ body, html {
 
 body {
   /* Set the background image */
-  background-image: url('./video_games.jpg');
+  background-image: url('./video_games.png');
 
   /* Full width and height */
   height: 100%;
@@ -233,8 +233,8 @@ body {
   background-size: cover;
 
   /* Add some transparency to the image */
-  background-color: rgba(0, 0, 0, 0);
-  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.35);
+  background-blend-mode: lighten;
 
   /* Fix the background image */
   position: fixed; /* This will make the image stay in place while scrolling */
@@ -283,10 +283,21 @@ body {
   border-radius: 5px;
 }
 
+.game-name {
+  flex: 1; /* Flex grow to use available space */
+  margin-right: 1em; /* Ensure some space between the name and the score */
+}
+
+.score {
+  min-width: 60px; /* Minimum width to align scores */
+  text-align: right; /* Align score text to the right */
+}
+
 .favorite-button {
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 20px;
   color: goldenrod;
+  margin-left: 1em; /* Ensure it doesn't stick to the score */
 }

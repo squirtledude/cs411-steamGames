@@ -115,7 +115,7 @@ const App = () => {
         <SearchBar onSearch={handleSearch} />
         <GenreDropdown onGenreSelect={handleGenreSelect} />
         {games.map(game => 
-            <Game key={game.id} gameName={game.GameName} username={username} onFavorite={handleFavorite} />
+            <Game key={game.id} gameName={game.GameName} metacriticScore={game.MetacriticScore} username={username} onFavorite={handleFavorite} />
         )}
         {isLoggedIn && <Recommendations games={recommendations} />}
       </div>
