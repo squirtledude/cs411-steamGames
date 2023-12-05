@@ -185,21 +185,40 @@ const App = () => {
   //         .catch(error => console.error('Error fetching recommendations:', error));
   // };
 
-  const fetchRecommendations = () => {
-    console.log('Fetching recommendations for userID:', userID);
-    fetch(`http://localhost:8080/api/recs?userID=${userID}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Received data:', data);
-            if (data.success) {
-                // Map the array of objects to an array of strings (game names)
-                const gameNames = data.recommendations.map(item => item.RecommendedGameName);
-                setRecommendations(gameNames);
-            } else {
-                console.error('Failed to fetch recommendations:', data.message);
-            }
-        })
-        .catch(error => console.error('Error fetching recommendations:', error));
+//   const fetchRecommendations = () => {
+//     console.log('Fetching recommendations for userID:', userID);
+//     fetch(`http://localhost:8080/api/recs?userID=${userID}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log('Received data:', data);
+//             if (data.success) {
+//                 // Map the array of objects to an array of strings (game names)
+//                 const gameNames = data.recommendations.map(item => item.RecommendedGameName);
+//                 setRecommendations(gameNames);
+//             } else {
+//                 console.error('Failed to fetch recommendations:', data.message);
+//             }
+//         })
+//         .catch(error => console.error('Error fetching recommendations:', error));
+// };
+
+const fetchRecommendations = () => {
+  if (userID) { // Check if userID is not null or undefined
+      console.log('Fetching recommendations for userID:', userID);
+      fetch(`http://localhost:8080/api/recs?userID=${userID}`)
+          .then(response => response.json())
+          .then(data => {
+              console.log('Received data:', data);
+              if (data.success) {
+                  setRecommendations(data.recommendations);
+              } else {
+                  console.error('Failed to fetch recommendations:', data.message);
+              }
+          })
+          .catch(error => console.error('Error fetching recommendations:', error));
+  } else {
+      console.log('UserID is null, skipping fetch');
+  }
 };
 
   
